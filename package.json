@@ -1,0 +1,20 @@
+{
+  "name": "algorithmicsynthjs",
+  "version": "0.0.0",
+  "description": "algorithmicsynthjs ==================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kchapelier/algorithmicsynthjs.git"
+  },
+  "author": "Kevin Chapelier <kevin.chapelier@gmail.com> (http://www.kchapelier.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kchapelier/algorithmicsynthjs/issues"
+  },
+  "homepage": "https://github.com/kchapelier/algorithmicsynthjs",
+  "private": true
+}
