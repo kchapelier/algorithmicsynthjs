@@ -89,7 +89,7 @@
         };
     };
 
-    AlgorithmicOscillator.prototype.createNode = function(note) {
+    AlgorithmicOscillator.prototype.createNode = function(context, note) {
         var func = this.createNodeFunction();
 
         var osc = context.createScriptProcessor(4096, 1, 1);

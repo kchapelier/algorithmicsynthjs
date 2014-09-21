@@ -39,6 +39,10 @@
         this.type = type;
     };
 
+    Filter.prototype.setQ = function(q) {
+        this.q = q;
+    };
+
     Filter.prototype.setBaseFrequency = function(baseFrequency) {
         this.baseFrequency = baseFrequency;
     };
@@ -47,7 +51,7 @@
         this.keyFollow = keyFollow;
     };
 
-    Filter.prototype.createNode = function(note) {
+    Filter.prototype.createNode = function(context, note) {
         var filter = context.createBiquadFilter();
 
         switch(this.type) {

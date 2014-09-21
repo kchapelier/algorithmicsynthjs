@@ -32,9 +32,9 @@
         return new App.AlgorithmicOscillator();
     };
 
-    OscillatorLine.prototype.createNode = function(note) {
-        var filter = this.filter.createNode(note);
-        var oscillator = this.oscillator.createNode(note);
+    OscillatorLine.prototype.createNode = function(context, note) {
+        var filter = this.filter.createNode(context, note);
+        var oscillator = this.oscillator.createNode(context, note);
 
         oscillator.connect(filter);
 
