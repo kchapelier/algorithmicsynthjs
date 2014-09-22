@@ -5,8 +5,8 @@ Three algorithmic oscillators in parallel with three individual filters and a gl
 
 ## Roadmap
 
- * Algorithmic oscillator (with octave, tuning, phasing, gain and stereo panning parameters).
- * 4 arbitrary parameters with configurable name
+ * ~~Algorithmic oscillator (with octave, tuning, phasing, gain and stereo panning parameters)~~.
+ * ~~4 arbitrary parameters with configurable name~~
  * ACE editor integration.
  * General structure (3 oscillator > 1 filter per oscillator > 1 global filter > gain).
  * Making it a polyphonic.

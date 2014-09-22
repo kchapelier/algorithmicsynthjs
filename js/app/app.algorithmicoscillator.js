@@ -3,6 +3,7 @@
 
     var AlgorithmicOscillator = function() {
         this.script = 'result = 0;';
+        this.phaseOffset = 0;
         this.octave = 0;
         this.tuning = 0;
         this.fineTuning = 0;
@@ -18,6 +19,7 @@
     // main parameters
 
     AlgorithmicOscillator.prototype.script = null;
+    AlgorithmicOscillator.prototype.phaseOffset = null;
     AlgorithmicOscillator.prototype.octave = null;
     AlgorithmicOscillator.prototype.tuning = null;
     AlgorithmicOscillator.prototype.fineTuning = null;
@@ -38,12 +40,13 @@
 
     AlgorithmicOscillator.prototype.createNodeFunction = function() {
         var script = [
-            'return (function(t, params, note) {',
+            'var phase = ((t * note.frequency / params.sampleRate) + params.phaseOffset) % 1;',
+            'return (function(t, phase, params, note) {',
                 '"use strict";',
                 'var result = 0, window, document;',
                 this.script,
                 'return result;',
-            '}(t, params, note));'
+            '}(t, phase, params, note));'
         ].join('');
 
         var func = new Function('t', 'params', 'note', script); // necessary evil
@@ -57,6 +60,9 @@
         if(properties.hasOwnProperty('script')) {
             this.script = properties.script;
             this.retrieveParametersLabel();
+        }
+        if(properties.hasOwnProperty('phaseOffset')) {
+            this.phaseOffset = properties.phaseOffset;
         }
         if(properties.hasOwnProperty('octave')) {
             this.octave = properties.octave;
@@ -117,6 +123,7 @@
     AlgorithmicOscillator.prototype.createParameterObject = function(context) {
         return {
             sampleRate : context.sampleRate,
+            phaseOffset : this.phaseOffset,
             val1 : this.param1,
             val2 : this.param2,
             val3 : this.param3,
