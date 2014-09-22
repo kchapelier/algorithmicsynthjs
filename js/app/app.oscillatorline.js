@@ -37,8 +37,10 @@
     };
 
     OscillatorLine.prototype.createNode = function(context, note) {
-        var filter = this.filter.createNode(context, note);
+        note = note.copy();
+
         var oscillator = this.oscillator.createNode(context, note);
+        var filter = this.filter.createNode(context, note);
 
         oscillator.connect(filter);
 

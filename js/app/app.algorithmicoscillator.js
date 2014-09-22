@@ -84,8 +84,7 @@
     };
 
     AlgorithmicOscillator.prototype.createNoteParameterObject = function(note) {
-
-        //TODO calculate frequency relatively to octave, tuning and fineTuning
+        note.transpose(this.octave * 12 + this.tuning, this.fineTuning);
 
         return {
             frequency : note.frequency
@@ -110,6 +109,7 @@
         //TODO make sure the way stereo gain is calculated is "good"
 
         var t = 0,
+            noteParams = this.createNoteParameterObject(note),
             leftGain = Math.min(1, Math.max(0, this.gain - this.pan)),
             rightGain = Math.min(1, Math.max(0, this.gain + this.pan));
 
@@ -118,8 +118,7 @@
                 leftData = buffer.getChannelData(0),
                 rightData = buffer.getChannelData(1);
 
-            var params = this.createParameterObject(context),
-                noteParams = this.createNoteParameterObject(note);
+            var params = this.createParameterObject(context);
 
             for (var sample = 0; sample < buffer.length; sample++) {
                 var sampleData = func(++t, params, noteParams);
