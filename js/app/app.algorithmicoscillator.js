@@ -31,6 +31,11 @@
     AlgorithmicOscillator.prototype.param3 = null;
     AlgorithmicOscillator.prototype.param4 = null;
 
+    AlgorithmicOscillator.prototype.param1Label = null;
+    AlgorithmicOscillator.prototype.param2Label = null;
+    AlgorithmicOscillator.prototype.param3Label = null;
+    AlgorithmicOscillator.prototype.param4Label = null;
+
     AlgorithmicOscillator.prototype.createNodeFunction = function() {
         var script = [
             'return (function(t, params, note) {',
@@ -47,8 +52,11 @@
     };
 
     AlgorithmicOscillator.prototype.setProperties = function(properties) {
+        //TODO make a setter for each parameter
+
         if(properties.hasOwnProperty('script')) {
             this.script = properties.script;
+            this.retrieveParametersLabel();
         }
         if(properties.hasOwnProperty('octave')) {
             this.octave = properties.octave;
@@ -80,6 +88,21 @@
 
         if(properties.hasOwnProperty('param1')) {
             this.param4 = properties.param4;
+        }
+    };
+
+    AlgorithmicOscillator.prototype.retrieveParametersLabel = function() {
+        var parameterLabelRegexp = /\/\*+ ?param([1-4]) *: *(.*) *\*+\//ig,
+            match = null;
+
+        this.param1Label = this.param2Label = this.param3Label = this.param4Label = '';
+
+        while((match = parameterLabelRegexp.exec(this.script)) !== null) {
+            var paramNumber = parseInt(match[1], 10),
+                paramLabel = match[2].trim();
+
+
+            this['param' + paramNumber + 'Label'] = paramLabel;
         }
     };
 
