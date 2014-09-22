@@ -2,9 +2,10 @@
     "use strict";
 
     var AlgorithmicOscillator = function() {
-        this.script = 'return 0;';
+        this.script = 'result = 0;';
         this.octave = 0;
         this.tuning = 0;
+        this.fineTuning = 0;
         this.pan = 0;
         this.gain = 1;
 
@@ -19,6 +20,7 @@
     AlgorithmicOscillator.prototype.script = null;
     AlgorithmicOscillator.prototype.octave = null;
     AlgorithmicOscillator.prototype.tuning = null;
+    AlgorithmicOscillator.prototype.fineTuning = null;
     AlgorithmicOscillator.prototype.pan = null;
     AlgorithmicOscillator.prototype.gain = null;
 
@@ -31,8 +33,12 @@
 
     AlgorithmicOscillator.prototype.createNodeFunction = function() {
         var script = [
-            'var data = (function(t, params, note) { "use strict"; var window, document; ' + this.script + '}(t, params, note));',
-            'return data;'
+            'return (function(t, params, note) {',
+                '"use strict";',
+                'var result = 0, window, document;',
+                this.script,
+                'return result;',
+            '}(t, params, note));'
         ].join('');
 
         var func = new Function('t', 'params', 'note', script); // necessary evil
@@ -49,6 +55,9 @@
         }
         if(properties.hasOwnProperty('tuning')) {
             this.tuning = properties.tuning;
+        }
+        if(properties.hasOwnProperty('fineTuning')) {
+            this.fineTuning = properties.fineTuning;
         }
         if(properties.hasOwnProperty('pan')) {
             this.pan = properties.pan;
@@ -75,13 +84,17 @@
     };
 
     AlgorithmicOscillator.prototype.createNoteParameterObject = function(note) {
+
+        //TODO calculate frequency relatively to octave, tuning and fineTuning
+
         return {
-            //TODO implements
+            frequency : note.frequency
         };
     };
 
-    AlgorithmicOscillator.prototype.createParameterObject = function() {
+    AlgorithmicOscillator.prototype.createParameterObject = function(context) {
         return {
+            sampleRate : context.sampleRate,
             val1 : this.param1,
             val2 : this.param2,
             val3 : this.param3,
@@ -92,18 +105,27 @@
     AlgorithmicOscillator.prototype.createNode = function(context, note) {
         var func = this.createNodeFunction();
 
-        var osc = context.createScriptProcessor(4096, 1, 1);
+        var osc = context.createScriptProcessor(4096, 1, 2);
 
-        var t = 0;
+        //TODO make sure the way stereo gain is calculated is "good"
+
+        var t = 0,
+            leftGain = Math.min(1, Math.max(0, this.gain - this.pan)),
+            rightGain = Math.min(1, Math.max(0, this.gain + this.pan));
+
         osc.onaudioprocess = function(event) {
-            var buffer = event.outputBuffer;
-            var data = buffer.getChannelData(0); // we DO know that our channel is mono
+            var buffer = event.outputBuffer,
+                leftData = buffer.getChannelData(0),
+                rightData = buffer.getChannelData(1);
 
-            var params = this.createParameterObject();
-            var noteParams = this.createNoteParameterObject(note);
+            var params = this.createParameterObject(context),
+                noteParams = this.createNoteParameterObject(note);
 
             for (var sample = 0; sample < buffer.length; sample++) {
-                data[sample] = func(++t, params, noteParams);
+                var sampleData = func(++t, params, noteParams);
+
+                leftData[sample] = sampleData * leftGain;
+                rightData[sample] = sampleData * rightGain;
             }
         }.bind(this);
 

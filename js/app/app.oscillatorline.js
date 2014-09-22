@@ -1,9 +1,13 @@
 (function(App) {
     "use strict";
 
-    var OscillatorLine = function() {
+    var OscillatorLine = function(properties) {
         this.filter = this.createFilter();
         this.oscillator = this.createAlgorithmicOscillator();
+
+        if(properties) {
+            this.setProperties(properties);
+        }
     };
 
     OscillatorLine.prototype.setProperties = function(properties) {
