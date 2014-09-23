@@ -1,11 +1,12 @@
-var context;
+var context,
+    synth;
 
 var App = {};
 
 window.addEventListener('load', function() {
     context = Aural.Utils.Support.getAudioContext();
 
-    var synth = new App.Synth(context);
+    synth = new App.Synth(context);
 
     console.log(synth);
 

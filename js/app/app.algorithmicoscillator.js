@@ -40,14 +40,12 @@
 
     AlgorithmicOscillator.prototype.createNodeFunction = function() {
         var script = [
-            'var phase = ((t * note.frequency / params.sampleRate) + params.phaseOffset) % 1;',
-            'return (function(t, phase, params, note) {',
-                '"use strict";',
-                'var result = 0, window, document;',
-                this.script,
-                'return result;',
-            '}(t, phase, params, note));'
-        ].join('');
+            'var phase = ((t * note.frequency / params.sampleRate) + params.phaseOffset + 1) % 1;',
+            'var window, document;',
+            'var result = 0;',
+            this.script,
+            'return result;',
+        ].join('\n');
 
         var func = new Function('t', 'params', 'note', script); // necessary evil
 
@@ -58,26 +56,25 @@
         //TODO make a setter for each parameter
 
         if(properties.hasOwnProperty('script')) {
-            this.script = properties.script;
-            this.retrieveParametersLabel();
+            this.setScript(properties.script);
         }
         if(properties.hasOwnProperty('phaseOffset')) {
-            this.phaseOffset = properties.phaseOffset;
+            this.setPhaseOffset(properties.phaseOffset);
         }
         if(properties.hasOwnProperty('octave')) {
-            this.octave = properties.octave;
+            this.setOctave(properties.octave);
         }
         if(properties.hasOwnProperty('tuning')) {
-            this.tuning = properties.tuning;
+            this.setTuning(properties.tuning);
         }
         if(properties.hasOwnProperty('fineTuning')) {
-            this.fineTuning = properties.fineTuning;
+            this.setFineTuning(properties.fineTuning);
         }
         if(properties.hasOwnProperty('pan')) {
-            this.pan = properties.pan;
+            this.setPan(properties.pan);
         }
         if(properties.hasOwnProperty('gain')) {
-            this.gain = properties.gain;
+            this.setGain(properties.gain);
         }
 
         if(properties.hasOwnProperty('param1')) {
@@ -95,6 +92,35 @@
         if(properties.hasOwnProperty('param1')) {
             this.param4 = properties.param4;
         }
+    };
+
+    AlgorithmicOscillator.prototype.setScript = function(script) {
+        this.script = script;
+        this.retrieveParametersLabel();
+    };
+
+    AlgorithmicOscillator.prototype.setPhaseOffset = function(phaseOffset) {
+        this.phaseOffset = Math.min(1, Math.max(-1, phaseOffset));
+    };
+
+    AlgorithmicOscillator.prototype.setOctave = function(octave) {
+        this.octave = Math.min(4, Math.max(-4, ~~octave));
+    };
+
+    AlgorithmicOscillator.prototype.setTuning = function(tuning) {
+        this.tuning = Math.min(12, Math.max(-12, ~~tuning));
+    };
+
+    AlgorithmicOscillator.prototype.setFineTuning = function(fineTuning) {
+        this.fineTuning = Math.min(100, Math.max(-100, fineTuning));
+    };
+
+    AlgorithmicOscillator.prototype.setPan = function(pan) {
+        this.pan = Math.min(1, Math.max(-1, pan));
+    };
+
+    AlgorithmicOscillator.prototype.setGain = function(gain) {
+        this.gain = Math.min(1, Math.max(0, gain));
     };
 
     AlgorithmicOscillator.prototype.retrieveParametersLabel = function() {
@@ -142,6 +168,9 @@
             noteParams = this.createNoteParameterObject(note),
             leftGain = Math.min(1, Math.max(0, this.gain - this.pan)),
             rightGain = Math.min(1, Math.max(0, this.gain + this.pan));
+
+        console.log(noteParams);
+        console.log(leftGain, rightGain);
 
         osc.onaudioprocess = function(event) {
             var buffer = event.outputBuffer,
