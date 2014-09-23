@@ -160,7 +160,7 @@
     AlgorithmicOscillator.prototype.createNode = function(context, note) {
         var func = this.createNodeFunction();
 
-        var osc = context.createScriptProcessor(4096, 1, 2);
+        var osc = context.createScriptProcessor(1024, 1, 2);
 
         //TODO make sure the way stereo gain is calculated is "good"
 
@@ -168,9 +168,6 @@
             noteParams = this.createNoteParameterObject(note),
             leftGain = Math.min(1, Math.max(0, this.gain - this.pan)),
             rightGain = Math.min(1, Math.max(0, this.gain + this.pan));
-
-        console.log(noteParams);
-        console.log(leftGain, rightGain);
 
         osc.onaudioprocess = function(event) {
             var buffer = event.outputBuffer,
