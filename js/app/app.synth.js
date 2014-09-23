@@ -7,7 +7,7 @@
             baseFrequency : 20000
         },
         oscillator : {
-            script : '/* param1 : label param1 */\n/* param2 : label param2 */\n/* param3 : label param3 */\n/* param4 : label param4 */\n\nresult = Math.sin(2 * Math.PI / phase);'
+            script : '/* param1 : label param1 */\n/* param2 : label param2 */\n/* param3 : label param3 */\n/* param4 : label param4 */\n\nresult = Math.sin(2 * Math.PI * phase);'
         }
     };
 
@@ -67,6 +67,20 @@
         }
 
         return voice;
+    };
+
+    Synth.prototype.noteOn = function(note) {
+        var voice = this.createVoice(note);
+
+        this.voices.push(voice);
+    };
+
+    Synth.prototype.noteOff = function(note) {
+        //TODO to implement
+    };
+
+    Synth.prototype.panic = function() {
+        //TODO to implement
     };
 
     App.Synth = Synth;
