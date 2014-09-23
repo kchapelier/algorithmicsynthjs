@@ -13,7 +13,7 @@
 
     var Synth = function(context) {
         this.oscillatorLines = [];
-        this.voices = [];
+        this.voices = {};
         this.context = context;
 
         this.createFilter();
@@ -70,17 +70,33 @@
     };
 
     Synth.prototype.noteOn = function(note) {
-        var voice = this.createVoice(note);
+        if(!this.voices.hasOwnProperty(note.midi)) {
+            var voice = this.createVoice(note);
 
-        this.voices.push(voice);
+            this.voices[note.midi] = voice;
+        }
     };
 
     Synth.prototype.noteOff = function(note) {
-        //TODO to implement
+        if(this.voices.hasOwnProperty(note.midi)) {
+            var voice = this.voices[note.midi];
+
+            voice.lines[0].output.disconnect(this.context); //TODO export in voice object, and don't just kill it, "release" it
+
+            delete this.voices[note.midi];
+        }
     };
 
     Synth.prototype.panic = function() {
-        //TODO to implement
+        for(var key in this.voices) {
+            if(this.voices.hasOwnProperty(key)) {
+                var voice = this.voices[key];
+
+                voice.lines[0].output.disconnect(this.context); //TODO export in voice object
+            }
+        }
+
+        this.voices = {};
     };
 
     App.Synth = Synth;
