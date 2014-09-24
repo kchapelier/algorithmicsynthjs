@@ -59,17 +59,20 @@
 
         for(var i = 0; i < this.oscillatorLines.length; i++) {
             var oscillatorLine = this.oscillatorLines[i];
-            voice.addLine(oscillatorLine.createNode(this.context, note));
+            if(oscillatorLine.isEnabled()) {
+                voice.addLine(oscillatorLine.createNode(this.context, note));
+            }
         }
 
         return voice;
     };
 
-    Synth.prototype.noteOn = function(note) {
+    Synth.prototype.noteOn = function(note, velocity) {
         if(!this.voices.hasOwnProperty(note.midi)) {
             var voice = this.createVoice(note);
 
-            voice.connect(this.context.destination);
+            voice.setVelocity(velocity);
+            voice.connect(this.filter);
 
             console.log(voice);
 
@@ -81,7 +84,7 @@
         if(this.voices.hasOwnProperty(note.midi)) {
             var voice = this.voices[note.midi];
 
-            voice.disconnect(this.context.destination); //TODO don't just kill it, "release" it
+            voice.disconnect(this.filter); //TODO don't just kill it, "release" it
 
             delete this.voices[note.midi];
         }
@@ -92,7 +95,7 @@
             if(this.voices.hasOwnProperty(key)) {
                 var voice = this.voices[key];
 
-                voice.disconnect(this.context.destination); //TODO export in voice object
+                voice.disconnect(this.filter); //TODO export in voice object
             }
         }
 

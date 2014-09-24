@@ -11,12 +11,14 @@ window.addEventListener('load', function() {
     synth = new App.Synth(context);
 
     synth.setOscillatorLineProperties(1, {
+        enabled : false,
         oscillator : {
             fineTuning : 7
         }
     });
 
     synth.setOscillatorLineProperties(2, {
+        enabled : false,
         oscillator : {
             fineTuning : -7
         }
@@ -25,7 +27,7 @@ window.addEventListener('load', function() {
     console.log(synth);
 
     smi.on('noteOn', function(data) {
-        synth.noteOn(Aural.Music.Note.createFromMidi(data.key));
+        synth.noteOn(Aural.Music.Note.createFromMidi(data.key), data.velocity / 127);
     }).on('noteOff', function(data) {
         synth.noteOff(Aural.Music.Note.createFromMidi(data.key));
     });

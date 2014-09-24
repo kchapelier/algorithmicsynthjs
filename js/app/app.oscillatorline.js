@@ -4,6 +4,7 @@
     var OscillatorLine = function(properties) {
         this.filter = this.createFilter();
         this.oscillator = this.createAlgorithmicOscillator();
+        this.enabled = true;
 
         if(properties) {
             this.setProperties(properties);
@@ -11,6 +12,10 @@
     };
 
     OscillatorLine.prototype.setProperties = function(properties) {
+        if(properties.hasOwnProperty('enabled')) {
+            this.enabled = !!properties.enabled;
+        }
+
         if(properties.hasOwnProperty('filter')) {
             this.setFilter(properties.filter);
         }
@@ -51,8 +56,13 @@
         };
     };
 
+    OscillatorLine.prototype.isEnabled = function() {
+        return this.enabled;
+    };
+
     OscillatorLine.prototype.oscillator = null;
     OscillatorLine.prototype.filter = null;
+    OscillatorLine.prototype.enabled = null;
 
     App.OscillatorLine = OscillatorLine;
 }(App || {}));
