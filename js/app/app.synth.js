@@ -24,8 +24,8 @@
 
         // setup the three oscillator lines
         this.addOscillatorLine();
-        //this.addOscillatorLine();
-        //this.addOscillatorLine();
+        this.addOscillatorLine();
+        this.addOscillatorLine();
     };
 
     Synth.prototype.oscillatorLines = null;
@@ -55,15 +55,11 @@
 
     Synth.prototype.createVoice = function(note) {
         //TODO use a custom object instead of a litteral
-        var voice = {
-            lines : []
-        };
+        var voice = new App.Voice(this.context);
 
         for(var i = 0; i < this.oscillatorLines.length; i++) {
-            var nodes = this.oscillatorLines[i].createNode(this.context, note);
-            voice.lines.push(nodes);
-
-            nodes.output.connect(this.context.destination);
+            var oscillatorLine = this.oscillatorLines[i];
+            voice.addLine(oscillatorLine.createNode(this.context, note));
         }
 
         return voice;
@@ -73,6 +69,10 @@
         if(!this.voices.hasOwnProperty(note.midi)) {
             var voice = this.createVoice(note);
 
+            voice.connect(this.context.destination);
+
+            console.log(voice);
+
             this.voices[note.midi] = voice;
         }
     };
@@ -81,7 +81,7 @@
         if(this.voices.hasOwnProperty(note.midi)) {
             var voice = this.voices[note.midi];
 
-            voice.lines[0].output.disconnect(this.context); //TODO export in voice object, and don't just kill it, "release" it
+            voice.disconnect(this.context.destination); //TODO don't just kill it, "release" it
 
             delete this.voices[note.midi];
         }
@@ -92,7 +92,7 @@
             if(this.voices.hasOwnProperty(key)) {
                 var voice = this.voices[key];
 
-                voice.lines[0].output.disconnect(this.context); //TODO export in voice object
+                voice.disconnect(this.context.destination); //TODO export in voice object
             }
         }
 

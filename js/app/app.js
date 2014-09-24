@@ -10,6 +10,18 @@ window.addEventListener('load', function() {
 
     synth = new App.Synth(context);
 
+    synth.setOscillatorLineProperties(1, {
+        oscillator : {
+            fineTuning : 7
+        }
+    });
+
+    synth.setOscillatorLineProperties(2, {
+        oscillator : {
+            fineTuning : -7
+        }
+    });
+
     console.log(synth);
 
     smi.on('noteOn', function(data) {
