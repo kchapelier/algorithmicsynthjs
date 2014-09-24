@@ -53,8 +53,6 @@
     };
 
     AlgorithmicOscillator.prototype.setProperties = function(properties) {
-        //TODO make a setter for each parameter
-
         if(properties.hasOwnProperty('script')) {
             this.setScript(properties.script);
         }

@@ -11,7 +11,9 @@
         }
     };
 
-    var Synth = function(context) {
+    var Synth = function(context, destination) {
+        destination = destination || context.destination;
+
         this.oscillatorLines = [];
         this.voices = {};
         this.context = context;
@@ -20,7 +22,7 @@
         this.createGain();
 
         this.filter.connect(this.gain);
-        this.gain.connect(this.context.destination);
+        this.gain.connect(destination);
 
         // setup the three oscillator lines
         this.addOscillatorLine();
@@ -35,12 +37,24 @@
     Synth.prototype.filter = null;
     Synth.prototype.gain = null;
 
+    Synth.prototype.modulation = null;
+
     Synth.prototype.createFilter = function() {
         this.filter = this.context.createBiquadFilter();
     };
 
     Synth.prototype.createGain = function() {
         this.gain = this.context.createGain();
+    };
+
+    Synth.prototype.setVolume = function(volume) {
+        volume = Math.max(0, Math.min(1, volume));
+
+        this.gain.gain.value = volume;
+    };
+
+    Synth.prototype.setModulation = function(modulation) {
+        this.modulation = Math.max(0, Math.min(1, modulation)); //TODO currently unused
     };
 
     Synth.prototype.addOscillatorLine = function() {
@@ -53,8 +67,11 @@
         }
     };
 
+    Synth.prototype.getVoiceCount = function() {
+        return Object.keys(this.voices).length;
+    };
+
     Synth.prototype.createVoice = function(note) {
-        //TODO use a custom object instead of a litteral
         var voice = new App.Voice(this.context);
 
         for(var i = 0; i < this.oscillatorLines.length; i++) {
@@ -73,8 +90,6 @@
 
             voice.setVelocity(velocity);
             voice.connect(this.filter);
-
-            console.log(voice);
 
             this.voices[note.midi] = voice;
         }
@@ -95,7 +110,7 @@
             if(this.voices.hasOwnProperty(key)) {
                 var voice = this.voices[key];
 
-                voice.disconnect(this.filter); //TODO export in voice object
+                voice.disconnect(this.filter);
             }
         }
 
