@@ -1,13 +1,15 @@
 var context,
-    synth;
+    synth,
+    smi;
 
-var App = {};
-
-var smi = new SimpleMidiInput();
+var App = { UI : {}};
 
 window.addEventListener('load', function() {
+    "use strict";
+
     context = Aural.Utils.Support.getAudioContext();
 
+    smi = new SimpleMidiInput();
     synth = new App.Synth(context);
 
     synth.setOscillatorLineProperties(1, {
@@ -22,17 +24,14 @@ window.addEventListener('load', function() {
         }
     });
 
-    console.log(synth);
+    var ui = new App.UI.Main(synth, smi);
+
+
 
     smi.on('noteOn', function(data) {
         synth.noteOn(Aural.Music.Note.createFromMidi(data.key), data.velocity / 127);
     }).on('noteOff', function(data) {
         synth.noteOff(Aural.Music.Note.createFromMidi(data.key));
-    });
-
-    // Modulation wheel
-    smi.on('cc1', function(data) {
-        synth.setModulation(data.value / 127);
     });
 
     // "Main volume" TODO set it using the MIDI learn system later
@@ -47,6 +46,29 @@ window.addEventListener('load', function() {
         synth.panic();
     });
 
+    /*
+    // Modulation wheel
+    smi.on('cc1', function(data) {
+        synth.setModulation(data.value / 127);
+    });
+
+    // Pitch wheel
+    smi.on('pitchWheel', function(data) {
+        synth.setPitch(data.value / 127);
+    });
+
+    // Sustain events
+    smi.on('cc64', function(data) {
+        synth.setSustain(data.value > 0);
+    });
+    */
+
+    /*
+    smi.on('global', function(data) {
+        console.log(data);
+    });
+    */
+
     navigator.requestMIDIAccess().then(
         function(midi) {
             console.log(midi.inputs());
@@ -56,8 +78,4 @@ window.addEventListener('load', function() {
             console.log('ERROR : ' + err.code);
         }
     );
-
-    setInterval(function() {
-        console.log('%i voices', synth.getVoiceCount());
-    }, 500);
 });

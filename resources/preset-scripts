@@ -1,0 +1,5 @@
+// PWM SQUARE PAD
+
+var pwm = Math.sin(t * note.frequency / params.sampleRate / 40) * 0.4;
+result = (phase > (0.5 + pwm) ? 1 : -1);
+

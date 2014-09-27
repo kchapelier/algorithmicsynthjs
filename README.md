@@ -7,10 +7,10 @@ Three algorithmic oscillators in parallel with three individual filters and a gl
 
  - [x] Algorithmic oscillator (with octave, tuning, phasing, gain and stereo panning parameters).
  - [x] 4 arbitrary parameters with configurable name.
- - [ ] ACE editor integration.
+ - [x] ACE editor integration.
  - [x] General structure (3 oscillator > 1 filter per oscillator > 1 gain per voices > 1 global filter > gain).
  - [x] Making it a polyphonic.
- - [ ] Making it work with Midi input.
+ - [x] Making it work with Midi input.
  - [ ] Implementing Midi learning.
  - [ ] Hardcoded enveloppe.
  - [ ] Hardcode a few preset.
@@ -20,11 +20,15 @@ Three algorithmic oscillators in parallel with three individual filters and a gl
 ## Extras
 
  - [ ] Configurable enveloppe, global or per oscillators ?
- - [ ] Flexible number of oscillators ?
+ - [x] Flexible number of oscillators ?
  - [ ] Other types of oscillators ? (basic waveform, handdrawn, ...)
  - [ ] Allow drag&dropping a sound file on a oscillator to be able to use its data in the algorithm.
  - [ ] Saving custom presets.
  - [ ] Making it visually appealing.
+ - [ ] Support modulation events
+ - [ ] Support pitch wheel events
+ - [ ] Support sustain events
+ - [ ] Support polyphonic after touch events
 
 ## Motivations
 
