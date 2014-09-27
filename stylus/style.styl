@@ -1,15 +1,23 @@
-@require variables
 @require utils
+@require variables
+@require overlay-editor
+@require synth
+
+html
+  height: 100%
 
 body
   background: colors.background
   margin: 0
   padding: 0
+  min-height: 100%
 
-#editor
-  position: absolute
-  left: 0
-  right: 0
-  top: 0
-  bottom: 0
-  background: red
+.wrapper
+  position:relative
+  top: 50%
+  width: 912px
+  margin: 0 auto
+  height: 400px
+  margin-top: -200px
+
+

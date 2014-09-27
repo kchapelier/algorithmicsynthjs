@@ -1,0 +1,53 @@
+.synth
+  background: colors.primary
+  position:absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+
+  synthWidth = 914px
+  synthHeight = 400px
+  mainMinWidth = 30px
+  mainMaxWidth = 300px
+  lineHeight = synthHeight / 3
+  lineWidth = synthWidth - mainMinWidth
+
+
+  .main
+    position:absolute
+    left: 0
+    width: mainMinWidth
+    bottom: 0
+    top: 0
+    -webkit-transition: 0.3s width
+    z-index: 2
+    background: green
+
+    &:hover
+      width: mainMaxWidth
+
+      .handle
+        background:yellow
+
+    .handle
+      position:absolute;
+      height: synthHeight - 20
+      top: 10
+      width: (mainMinWidth/3)
+      right: (mainMinWidth/3)
+      background:blue
+      -webkit-transition: 0.3s background
+
+  .lines
+    position: absolute
+    left: mainMinWidth
+    right: 0
+    bottom: 0
+    top: 0
+    z-index: 1
+
+  .line
+    width: lineWidth
+    height: lineHeight
+    background: black
