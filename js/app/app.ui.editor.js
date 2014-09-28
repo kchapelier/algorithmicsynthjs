@@ -12,13 +12,7 @@
 
     Editor.prototype.createACE = function() {
         this.editorElement = document.createElement('pre');
-        this.editorElement.style.position = 'absolute';
-        this.editorElement.style.margin = 0;
-        this.editorElement.style.padding = 0;
-        this.editorElement.style.top = 0;
-        this.editorElement.style.bottom = 0;
-        this.editorElement.style.left = 0;
-        this.editorElement.style.right = '200px';
+        this.editorElement.className = 'ace';
         this.element.appendChild(this.editorElement);
 
         this.editor = ace.edit(this.editorElement);
@@ -38,14 +32,7 @@
 
     Editor.prototype.createInsertableList = function() {
         this.insertableList = document.createElement('ul');
-        this.insertableList.style.position = 'absolute';
-        this.insertableList.style.background = 'red';
-        this.insertableList.style.margin = 0;
-        this.insertableList.style.padding = 0;
-        this.insertableList.style.bottom = '50px';
-        this.insertableList.style.top = 0;
-        this.insertableList.style.right = 0;
-        this.insertableList.style.width = '200px';
+        this.insertableList.className = 'insertables';
 
         this.populateInsertableList();
 
@@ -72,14 +59,7 @@
 
     Editor.prototype.createButtons = function() {
         this.buttonList = document.createElement('div');
-        this.buttonList.style.position = 'absolute';
-        this.buttonList.style.background = 'green';
-        this.buttonList.style.margin = 0;
-        this.buttonList.style.padding = 0;
-        this.buttonList.style.bottom = 0;
-        this.buttonList.style.height = '50px';
-        this.buttonList.style.right = 0;
-        this.buttonList.style.width = '200px';
+        this.buttonList.className = 'buttons';
 
         this.element.appendChild(this.buttonList);
 

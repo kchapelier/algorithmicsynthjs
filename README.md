@@ -29,6 +29,7 @@ Three algorithmic oscillators in parallel with three individual filters and a gl
  - [ ] Support pitch wheel events
  - [ ] Support sustain events
  - [ ] Support polyphonic after touch events
+ - [ ] Selection of the MIDI channel controlling the synth (currently omni)
 
 ## Motivations
 
