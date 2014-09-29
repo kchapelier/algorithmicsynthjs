@@ -19,9 +19,9 @@ Three algorithmic oscillators in parallel with three individual filters and a gl
 
 ## Extras
 
- - [ ] Configurable enveloppe, global or per oscillators ?
- - [x] Flexible number of oscillators ?
- - [ ] Other types of oscillators ? (basic waveform, handdrawn, ...)
+ - [ ] Configurable enveloppe, global or per oscillators
+ - [x] Flexible number of oscillators
+ - [ ] Other types of oscillators (basic waveform, handdrawn, ... may be too off topic)
  - [ ] Allow drag&dropping a sound file on a oscillator to be able to use its data in the algorithm.
  - [ ] Saving custom presets.
  - [ ] Making it visually appealing.
@@ -30,6 +30,7 @@ Three algorithmic oscillators in parallel with three individual filters and a gl
  - [ ] Support sustain events
  - [ ] Support polyphonic after touch events
  - [ ] Selection of the MIDI channel controlling the synth (currently omni)
+ - [ ] Scala support
 
 ## Motivations
 
