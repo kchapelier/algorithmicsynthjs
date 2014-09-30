@@ -37,8 +37,6 @@
     Synth.prototype.filter = null;
     Synth.prototype.gain = null;
 
-    Synth.prototype.modulation = null;
-
     Synth.prototype.createFilter = function() {
         this.filter = this.context.createBiquadFilter();
     };
@@ -99,9 +97,10 @@
         if(this.voices.hasOwnProperty(note.midi)) {
             var voice = this.voices[note.midi];
 
-            voice.disconnect(this.filter); //TODO don't just kill it, "release" it
-
-            delete this.voices[note.midi];
+            voice.release(function() {
+                voice.disconnect(this.filter);
+                delete this.voices[note.midi];
+            }.bind(this));
         }
     };
 

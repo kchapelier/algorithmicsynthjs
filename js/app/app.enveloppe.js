@@ -59,29 +59,28 @@
         if(!released) {
             this.applyFirstPartToAudioParam(context, audioParam, min, max);
         } else {
-            this.applyReleaseToAudioParam(context, audioParam, min, max);
+            this.applyReleaseToAudioParam(context, audioParam, min);
         }
     };
 
     Enveloppe.prototype.applyFirstPartToAudioParam = function(context, audioParam, min, max) {
         var currentTime = context.currentTime;
 
-        console.log(min, max, currentTime, this.attack, this.decay);
-
-        audioParam.cancelScheduledValues(currentTime);
-        audioParam.value = min;
+        audioParam.value = max;
+        //audioParam.setValueAtTime(min, currentTime);
 
         //TODO somehow the attack is ignored
         //safeExponentialRampToValue(audioParam, max, currentTime + this.attack);
         //safeExponentialRampToValue(audioParam, this.sustain * max, currentTime + this.attack + this.decay);
-        audioParam.linearRampToValueAtTime(max, currentTime + this.attack);
-        audioParam.linearRampToValueAtTime(this.sustain * max, currentTime + this.attack + this.decay);
+        //audioParam.linearRampToValueAtTime(max, currentTime + this.attack);
+        //audioParam.linearRampToValueAtTime(this.sustain * max, currentTime + this.attack + this.decay);
     };
 
-    Enveloppe.prototype.applyReleaseToAudioParam = function(context, audioParam, min, max) {
+    Enveloppe.prototype.applyReleaseToAudioParam = function(context, audioParam, min) {
         var currentValue = audioParam.value,
             currentTime = context.currentTime;
 
+        //TODO doesnt work as expected
         audioParam.cancelScheduledValues(currentTime);
         safeExponentialRampToValue(audioParam, min, currentTime + this.release);
     };
