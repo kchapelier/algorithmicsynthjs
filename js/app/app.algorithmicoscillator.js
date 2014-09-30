@@ -38,16 +38,25 @@
     AlgorithmicOscillator.prototype.param3Label = null;
     AlgorithmicOscillator.prototype.param4Label = null;
 
-    AlgorithmicOscillator.prototype.createNodeFunction = function() {
+    AlgorithmicOscillator.prototype.createNodeFunction = function(params, noteParams) {
+        //TODO add functions
+
         var script = [
-            'var phase = ((t * note.frequency / params.sampleRate) + params.phaseOffset + 1) % 1;',
+            '"use strict";',
+            'var previous = 0;',
+            'var t = 0;',
             'var window, document;',
-            'var result = 0;',
-            this.script,
-            'return result;',
+            'return function() {',
+            '   var phase = ((t * note.frequency / params.sampleRate) + params.phaseOffset + 1) % 1;',
+            '   var result = 0;',
+            '   t++;',
+            '   ' + this.script + ';',
+            '   previous = result;',
+            '   return result;',
+            '};'
         ].join('\n');
 
-        var func = new Function('t', 'params', 'note', script); // necessary evil
+        var func = (new Function('params', 'note', script))(params, noteParams); // necessary evil
 
         return func.bind(func);
     };
@@ -156,31 +165,29 @@
     };
 
     AlgorithmicOscillator.prototype.createNode = function(context, note) {
-        var func = this.createNodeFunction();
-
         var osc = context.createScriptProcessor(1024, 1, 2);
 
         //TODO make sure the way stereo gain is calculated is "good"
 
-        var t = 0,
-            noteParams = this.createNoteParameterObject(note),
+        var noteParams = this.createNoteParameterObject(note),
+            params = this.createParameterObject(context),
             leftGain = Math.min(1, Math.max(0, this.gain - this.pan)),
             rightGain = Math.min(1, Math.max(0, this.gain + this.pan));
+
+        var func = this.createNodeFunction(params, noteParams);
 
         osc.onaudioprocess = function(event) {
             var buffer = event.outputBuffer,
                 leftData = buffer.getChannelData(0),
                 rightData = buffer.getChannelData(1);
 
-            var params = this.createParameterObject(context);
-
             for (var sample = 0; sample < buffer.length; sample++) {
-                var sampleData = func(++t, params, noteParams);
+                var sampleData = func();
 
                 leftData[sample] = sampleData * leftGain;
                 rightData[sample] = sampleData * rightGain;
             }
-        }.bind(this);
+        };
 
         return osc;
     };
