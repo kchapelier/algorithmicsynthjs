@@ -17,6 +17,7 @@
         this.oscillatorLines = [];
         this.voices = {};
         this.context = context;
+        this.recording = false;
 
         this.createFilter();
         this.createGain();
@@ -36,6 +37,38 @@
 
     Synth.prototype.filter = null;
     Synth.prototype.gain = null;
+
+    Synth.prototype.recorder = null;
+    Synth.prototype.recording = null;
+
+    Synth.prototype.startRecording = function() {
+        if(!this.recording) {
+            if (!this.recorder) {
+                this.recorder = new Recorder(this.gain, {
+                    workerPath : 'js/vendors/recorderjs/recorderWorker.js',
+                    bufferLen : 4096
+                });
+            }
+
+            this.recorder.record();
+            this.recording = true;
+        }
+    };
+
+    Synth.prototype.stopRecording = function() {
+        if(this.recording) {
+            this.recorder.stop();
+
+            this.recorder.exportWAV(function(blob) {
+                if(blob) {
+                    Recorder.forceDownload(blob);
+                }
+            });
+
+            this.recorder.clear();
+            this.recording = false;
+        }
+    };
 
     Synth.prototype.createFilter = function() {
         this.filter = this.context.createBiquadFilter();
