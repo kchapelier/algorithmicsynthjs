@@ -14,10 +14,10 @@ Three algorithmic oscillators in parallel with three individual filters and a gl
  - [ ] Implementing Midi learning.
  - [ ] Hardcoded enveloppe.
  - [ ] Hardcode a few preset.
- - [ ] Output saving as WAV.
+ - [x] Output saving as WAV.
  - [ ] Minimal UI : premature UI considerations are considered harmful (I just [made this up](http://modelviewculture.com/pieces/the-making-of-myths)).
 
-## Extras
+## Extras & Future
 
  - [ ] Configurable enveloppe, global or per oscillators
  - [x] Flexible number of oscillators
@@ -31,6 +31,7 @@ Three algorithmic oscillators in parallel with three individual filters and a gl
  - [ ] Support polyphonic after touch events
  - [ ] Selection of the MIDI channel controlling the synth (currently omni)
  - [ ] Scala support
+ - [ ] Follow the development of [Audio Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API#Audio_Workers)
 
 ## Motivations
 
