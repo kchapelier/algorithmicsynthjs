@@ -1,6 +1,9 @@
 algorithmicsynthjs
 ==================
 
+ON HOLD, waiting for an [AudioWorker](https://github.com/WebAudio/web-audio-api/issues/113) implementation to move forward. It turns out that creating multiple
+ScriptProcessorNode's doesn't work too well.
+
 Three algorithmic oscillators in parallel with three individual filters and a global filter.
 
 ## Roadmap
